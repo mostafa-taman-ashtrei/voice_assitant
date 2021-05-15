@@ -4,6 +4,9 @@ import uuid
 from playsound import playsound
 import os
 from time import ctime
+import random
+
+from utils.word_in_command import word_in_command
 
 
 class VoiceBot:
@@ -44,13 +47,28 @@ class VoiceBot:
         if "time" in command:
             self.speak(ctime())
 
-        if "sleep" in command:
+        if word_in_command(["hi", "yo"], command):
+            greetings = [
+                "Welcome, how can i help you",
+                "hello",
+                "What is your command",
+                "hey, what's up",
+            ]
+            self.speak(f"{greetings[random.randint(0,len(greetings)-1)]} {username}")
+
+        if "flip a coin" in command:
+            options = ["heads", "tails"]
+            choice = random.choice(options)
+            self.speak(f"I got {choice}")
+
+        if "exit" in command:
             self.speak("bye")
             exit()
 
 
-bot = VoiceBot(username="adam")
-bot.speak(f"How can i help you, sir")
+username = "adam"
+bot = VoiceBot(username=username)
+bot.speak(f"Welcome master {username}. How can i help you today?")
 
 while True:
     command = bot.record_audio()
